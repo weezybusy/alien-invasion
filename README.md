@@ -1,5 +1,5 @@
 # Alien Invasion
-Learning project form the book *Python Crush Course* by *Eric Matthes*
+Learning project form the book *Python Crush Course* by *Eric Matthes*.
 
 ## Project description
 In *Alien Invasion*, the player controls a rocket ship that appears at the
