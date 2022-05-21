@@ -16,7 +16,6 @@ class Space:
 
         self.rect.center = self.screen_rect.center
 
-
     def blitme(self):
         """Draw space at its current location."""
         self.screen.blit(self.image, self.rect)
