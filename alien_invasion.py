@@ -4,6 +4,7 @@ import pygame
 
 from settings import Settings
 from ship import Ship
+from space import Space
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
@@ -17,6 +18,7 @@ class AlienInvasion:
                 (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
 
+        self.space = Space(self)
         self.ship = Ship(self)
 
     def run_game(self):
@@ -34,6 +36,7 @@ class AlienInvasion:
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
+        self.space.blitme()
         self.ship.blitme()
 
         pygame.display.flip()
