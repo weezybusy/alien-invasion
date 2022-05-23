@@ -40,16 +40,16 @@ class AlienInvasion:
 
     def _check_keydown_events(self, event):
         """Respond to keypresses."""
-        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+        if event.key == pygame.K_LEFT or event.key == pygame.K_j:
             self.ship.moving_left = True
-        elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+        elif event.key == pygame.K_RIGHT or event.key == pygame.K_l:
             self.ship.moving_right = True
 
     def _check_keyup_events(self, event):
         """Respond to key releases."""
-        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+        if event.key == pygame.K_LEFT or event.key == pygame.K_j:
             self.ship.moving_left = False
-        elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+        elif event.key == pygame.K_RIGHT or event.key == pygame.K_l:
             self.ship.moving_right = False
 
     def _update_screen(self):
