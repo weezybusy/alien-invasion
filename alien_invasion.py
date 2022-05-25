@@ -2,11 +2,11 @@ import sys
 
 import pygame
 
+from alien import Alien
+from bullet import Bullet
 from settings import Settings
 from ship import Ship
-from bullet import Bullet
-from space import Space
-from alien import Alien
+from star import Star
 
 
 class AlienInvasion:
@@ -15,6 +15,7 @@ class AlienInvasion:
     def __init__(self):
         """Initialize the game, and create game resources."""
         pygame.init()
+        self.clock = pygame.time.Clock()
         self.settings = Settings()
 
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -22,7 +23,8 @@ class AlienInvasion:
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
 
-        self.space = Space(self)
+        self.stars = pygame.sprite.Group()
+        self._create_stars()
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
@@ -31,6 +33,7 @@ class AlienInvasion:
     def run_game(self):
         """Start the main loop for the game."""
         while True:
+            self.clock.tick(self.settings.fps)
             self._check_events()
             self.ship.update()
             self._update_bullets()
@@ -109,15 +112,21 @@ class AlienInvasion:
         alien.rect.y = alien.y
         self.aliens.add(alien)
 
+    def _create_stars(self):
+        """Create stars."""
+        for n in range(self.settings.number_stars):
+            star = Star(self)
+            self.stars.add(star)
+
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
-        self.space.blitme()
+        for star in self.stars.sprites():
+            star.draw_star()
         self.aliens.draw(self.screen)
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
-
         pygame.display.flip()
 
 
