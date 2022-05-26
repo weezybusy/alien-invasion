@@ -12,11 +12,9 @@ class Star(Sprite):
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         self.color = ai_game.settings.star_color
-        n = randint(0, 5)
-        self.x = randint(0, self.settings.screen_width)
-        self.y = randint(0, self.settings.screen_height)
-        self.rect = pygame.Rect(self.x, self.y, n, n)
+        self.side_size = randint(1, 2)
+        self.rect = pygame.Rect(0, 0, self.side_size, self.side_size)
 
     def draw_star(self):
-        """Draw a bullet."""
+        """Draw a star."""
         pygame.draw.rect(self.screen, self.color, self.rect)

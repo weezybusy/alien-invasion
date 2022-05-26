@@ -2,6 +2,8 @@ import sys
 
 import pygame
 
+from random import randint
+
 from alien import Alien
 from bullet import Bullet
 from settings import Settings
@@ -114,9 +116,35 @@ class AlienInvasion:
 
     def _create_stars(self):
         """Create stars."""
-        for n in range(self.settings.number_stars):
-            star = Star(self)
-            self.stars.add(star)
+        screen_width = self.settings.screen_width
+        screen_height = self.settings.screen_height
+        star_distance = self.settings.star_distance
+
+        # Calculate number of stars that fit on the screen in x direction.
+        number_stars_x = screen_width // star_distance
+        # Calculate number of stars that fit on the screen in y direction.
+        number_stars_y = screen_height // star_distance
+
+        for star_number_y in range(number_stars_y):
+            for star_number_x in range(number_stars_x):
+                if self._star_exists():
+                    self._create_star(star_number_x, star_number_y)
+
+    def _create_star(self, star_number_x, star_number_y):
+        """Create a star."""
+        star = Star(self)
+        star_distance = self.settings.star_distance
+        star.x = randint(-10, 10)
+        star.y = randint(-10, 10)
+        star.rect.x = star_distance + (star_distance * star_number_x) + star.x
+        star.rect.y = star_distance + (star_distance * star_number_y) + star.y
+        self.stars.add(star)
+
+    def _star_exists(self):
+        """Return True if star exists and False otherwise."""
+        if randint(0, 1):
+            return True
+        return False
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""

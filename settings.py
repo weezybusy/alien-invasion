@@ -29,6 +29,7 @@ class Settings:
         self.alien_height = 50
         self.alien_speed = 1
 
-        # Star settings
+        # Star settings.
         self.star_color = (255, 255, 255)
-        self.number_stars = 100
+        # The higher is value the lower is star density.
+        self.star_distance = 20
