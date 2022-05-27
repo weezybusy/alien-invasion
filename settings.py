@@ -13,7 +13,7 @@ class Settings:
         self.bg_color = (33, 33, 33)
 
         # Ship settings.
-        self.ship_speed = 5
+        self.ship_speed = 5.0
         self.ship_width = 50
         self.ship_height = 50
 
@@ -27,7 +27,10 @@ class Settings:
         # Alien settings.
         self.alien_width = 50
         self.alien_height = 50
-        self.alien_speed = 1
+        self.alien_speed = 1.0
+        self.fleet_drop_speed = 10
+        # Fleet direction of 1 represents right; -1 represents left.
+        self.fleet_direction = 1
 
         # Star settings.
         self.star_color = (255, 255, 255)
