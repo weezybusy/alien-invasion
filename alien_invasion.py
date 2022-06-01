@@ -21,12 +21,10 @@ class AlienInvasion:
         pygame.init()
         self.clock = pygame.time.Clock()
         self.settings = Settings()
-
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
-
         # Create an instance to store game statistics.
         self.stats = GameStats(self)
         self.stars = pygame.sprite.Group()
@@ -35,7 +33,6 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
-
         # Make the Play button.
         self.play_button = Button(self, "Play")
 
@@ -66,20 +63,21 @@ class AlienInvasion:
         """Start a new game when the player clicks Play."""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_active:
-            # Reset game statistics.
-            self.stats.reset_stats()
-            self.stats.game_active = True
+            self._start_game()
 
-            # Get rid of any remaining aliens and bullets.
-            self.aliens.empty()
-            self.bullets.empty()
-
-            # Create a new fleet and center the ship.
-            self._create_fleet()
-            self.ship.center_ship()
-
-            # Hide the mouse cursor.
-            pygame.mouse.set_visible(False)
+    def _start_game(self):
+        """Reset stats, fleet, ship, remove cursor, set game to active."""
+        # Reset game statistics.
+        self.stats.reset_stats()
+        self.stats.game_active = True
+        # Get rid of any remaining aliens and bullets.
+        self.aliens.empty()
+        self.bullets.empty()
+        # Create a new fleet and center the ship.
+        self._create_fleet()
+        self.ship.center_ship()
+        # Hide the mouse cursor.
+        pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
         """Respond to keypresses."""
@@ -89,6 +87,9 @@ class AlienInvasion:
             self.ship.moving_left = True
         elif event.key == pygame.K_RIGHT or event.key == pygame.K_l:
             self.ship.moving_right = True
+        elif event.key == pygame.K_p:
+            if not self.stats.game_active:
+                self._start_game()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
 
@@ -167,17 +168,14 @@ class AlienInvasion:
         """Create the fleet of aliens."""
         alien_width = self.settings.alien_width
         alien_height = self.settings.alien_width
-
         # Determine the number of aliens that fit on the screen.
         available_space_x = self.settings.screen_width - (2 * alien_width)
         number_aliens_x = available_space_x // (2 * alien_width)
-
         # Determine the number of rows of aliens that fit on the screen.
         screen_height = self.settings.screen_height
         ship_height = self.settings.ship_height
         available_space_y = screen_height - ship_height - (3 * alien_height)
         number_rows = available_space_y // (2 * alien_height)
-
         # Create the full fleet of aliens.
         for row_number in range(number_rows):
             for alien_number in range(number_aliens_x):
@@ -212,12 +210,10 @@ class AlienInvasion:
         screen_width = self.settings.screen_width
         screen_height = self.settings.screen_height
         star_distance = self.settings.star_distance
-
         # Calculate number of stars that fit on the screen in x direction.
         number_stars_x = screen_width // star_distance
         # Calculate number of stars that fit on the screen in y direction.
         number_stars_y = screen_height // star_distance
-
         for star_number_y in range(number_stars_y):
             for star_number_x in range(number_stars_x):
                 if self._star_exists():
