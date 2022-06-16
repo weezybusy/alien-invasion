@@ -25,7 +25,6 @@ class AlienInvasion:
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
-        # Create an instance to store game statistics.
         self.stats = GameStats(self)
         self.stars = pygame.sprite.Group()
         self._create_stars()
@@ -33,8 +32,25 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
-        # Make the Play button.
-        self.play_button = Button(self, "Play")
+        self.play_button = Button(self, "PLAY")
+
+        self._make_difficulty_buttons()
+
+    def _make_difficulty_buttons(self):
+        """Make difficulty buttons."""
+        self.easy_button = Button(self, "EASY")
+        self.normal_button = Button(self, "NORMAL")
+        self.hard_button = Button(self, "HARD")
+
+        self.easy_button.rect.top = (
+                self.play_button.rect.top + 1.5 * self.play_button.height)
+        self.easy_button._update_msg_position()
+        self.normal_button.rect.top = (
+                self.easy_button.rect.top + 1.5 * self.easy_button.height)
+        self.normal_button._update_msg_position()
+        self.hard_button.rect.top = (
+                self.normal_button.rect.top + 1.5 * self.normal_button.height)
+        self.hard_button._update_msg_position()
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -51,34 +67,43 @@ class AlienInvasion:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
-                self._check_play_button(mouse_pos)
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
+                self._check_difficulty_buttons(mouse_pos)
 
     def _check_play_button(self, mouse_pos):
         """Start a new game when the player clicks Play."""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_active:
-            # Reset the game settings.
             self.settings.initialize_dynamic_settings()
             self._start_game()
 
+    def _check_difficulty_buttons(self, mouse_pos):
+        """Set mode to easy when the player clicks EASY."""
+        easy_button_clicked = self.easy_button.rect.collidepoint(mouse_pos)
+        normal_button_clicked = self.normal_button.rect.collidepoint(mouse_pos)
+        hard_button_clicked = self.hard_button.rect.collidepoint(mouse_pos)
+
+        if easy_button_clicked:
+            self.settings.difficulty = "easy"
+        elif normal_button_clicked:
+            self.settings.difficulty = "normal"
+        elif hard_button_clicked:
+            self.settings.difficulty = "hard"
+
     def _start_game(self):
         """Reset stats, fleet, ship, remove cursor, set game to active."""
-        # Reset game statistics.
         self.stats.reset_stats()
         self.stats.game_active = True
-        # Get rid of any remaining aliens and bullets.
         self.aliens.empty()
         self.bullets.empty()
-        # Create a new fleet and center the ship.
         self._create_fleet()
         self.ship.center_ship()
-        # Hide the mouse cursor.
         pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
@@ -250,6 +275,9 @@ class AlienInvasion:
             bullet.draw_bullet()
         if not self.stats.game_active:
             self.play_button.draw_button()
+            self.easy_button.draw_button()
+            self.normal_button.draw_button()
+            self.hard_button.draw_button()
         pygame.display.flip()
 
 
