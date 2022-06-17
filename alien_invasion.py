@@ -11,6 +11,7 @@ from settings import Settings
 from ship import Ship
 from star import Star
 from button import Button
+from scoreboard import Scoreboard
 
 
 class AlienInvasion:
@@ -22,8 +23,9 @@ class AlienInvasion:
         self.clock = pygame.time.Clock()
         self.settings = Settings()
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.settings.screen_width = self.screen.get_rect().width
-        self.settings.screen_height = self.screen.get_rect().height
+        self.screen_rect = self.screen.get_rect()
+        self.settings.screen_width = self.screen_rect.width
+        self.settings.screen_height = self.screen_rect.height
         pygame.display.set_caption("Alien Invasion")
         self.stats = GameStats(self)
         self.stars = pygame.sprite.Group()
@@ -33,6 +35,7 @@ class AlienInvasion:
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
         self.play_button = Button(self, "PLAY")
+        self.sb = Scoreboard(self)
 
         self._make_difficulty_buttons()
 
@@ -275,6 +278,7 @@ class AlienInvasion:
             bullet.draw_bullet()
         if not self.stats.game_active:
             self.play_button.draw_button()
+            self.sb.show_score()
             self.easy_button.draw_button()
             self.normal_button.draw_button()
             self.hard_button.draw_button()
