@@ -36,7 +36,6 @@ class AlienInvasion:
         self._create_fleet()
         self.play_button = Button(self, "PLAY")
         self.sb = Scoreboard(self)
-
         self._make_difficulty_buttons()
 
     def _make_difficulty_buttons(self):
@@ -69,7 +68,7 @@ class AlienInvasion:
         """Respond to keypresses and mouse events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                sys.exit()
+                self._exit_game()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
@@ -78,6 +77,11 @@ class AlienInvasion:
                 mouse_pos = pygame.mouse.get_pos()
                 self._check_play_button(mouse_pos)
                 self._check_difficulty_buttons(mouse_pos)
+
+    def _save_high_score(self):
+        """Save high score to the file."""
+        with open("high_score.txt", 'w') as f:
+            f.write(str(self.stats.high_score))
 
     def _check_play_button(self, mouse_pos):
         """Start a new game when the player clicks Play."""
@@ -91,7 +95,6 @@ class AlienInvasion:
         easy_button_clicked = self.easy_button.rect.collidepoint(mouse_pos)
         normal_button_clicked = self.normal_button.rect.collidepoint(mouse_pos)
         hard_button_clicked = self.hard_button.rect.collidepoint(mouse_pos)
-
         if easy_button_clicked:
             self.settings.difficulty = "easy"
         elif normal_button_clicked:
@@ -115,7 +118,7 @@ class AlienInvasion:
     def _check_keydown_events(self, event):
         """Respond to keypresses."""
         if event.key == pygame.K_q:
-            sys.exit()
+            self._exit_game()
         elif event.key == pygame.K_LEFT or event.key == pygame.K_j:
             self.ship.moving_left = True
         elif event.key == pygame.K_RIGHT or event.key == pygame.K_l:
@@ -125,6 +128,11 @@ class AlienInvasion:
                 self._start_game()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
+
+    def _exit_game(self):
+        """Save high score and exit game."""
+        self._save_high_score()
+        sys.exit()
 
     def _check_keyup_events(self, event):
         """Respond to key releases."""
