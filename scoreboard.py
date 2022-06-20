@@ -14,10 +14,12 @@ class Scoreboard:
         self.screen_rect = self.screen.get_rect()
         self.settings = ai_game.settings
         self.stats = ai_game.stats
-        # Font settings for scoring information.
         self.text_color = (255, 255, 255)
         self.font = pygame.font.SysFont(None, 48)
-        # Prepare the initial score image.
+        self.prep_images()
+
+    def prep_images(self):
+        """Prepeare score, high score, level, and ships images."""
         self.prep_score()
         self.prep_high_score()
         self.prep_level()

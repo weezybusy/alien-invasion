@@ -104,16 +104,18 @@ class AlienInvasion:
 
     def _start_game(self):
         """Reset stats, fleet, ship, remove cursor, set game to active."""
-        self.stats.reset_stats()
         self.stats.game_active = True
-        self.sb.prep_score()
-        self.sb.prep_level()
-        self.sb.prep_ships()
+        self.sb.prep_images()
+        self._reset_game()
+        pygame.mouse.set_visible(False)
+
+    def _reset_game(self):
+        """Reset stats, fleet, bullets, and ship's position."""
+        self.stats.reset_stats()
         self.aliens.empty()
         self.bullets.empty()
         self._create_fleet()
         self.ship.center_ship()
-        pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
         """Respond to keypresses."""
@@ -158,7 +160,6 @@ class AlienInvasion:
 
     def _check_bullet_alien_collisions(self):
         """Respond to bullet-alien collisions."""
-        # Remove any bullets and aliens that have collided.
         collisions = pygame.sprite.groupcollide(
                 self.bullets, self.aliens, True, True)
         if collisions:
@@ -196,16 +197,9 @@ class AlienInvasion:
     def _ship_hit(self):
         """Respond to a ship being hit by the alien."""
         if self.stats.ships_left > 0:
-            # Decrement ships_left, and update scoreboard.
             self.stats.ships_left -= 1
             self.sb.prep_ships()
-            # Get rid of any remaining aliens.
-            self.aliens.empty()
-            self.bullets.empty()
-            # Create a new fleet and center the ship.
-            self._create_fleet()
-            self.ship.center_ship()
-            # Pause.
+            self._reset_ship_fleet_bullets()
             sleep(0.5)
         else:
             self.stats.game_active = False
@@ -271,6 +265,7 @@ class AlienInvasion:
         # Calculate number of stars that fit on the screen in y direction.
         number_stars_y = screen_height // star_distance
         for star_number_y in range(number_stars_y):
+            # Create stars in random locations of the screen.
             for star_number_x in range(number_stars_x):
                 if self._star_exists():
                     self._create_star(star_number_x, star_number_y)
@@ -295,19 +290,31 @@ class AlienInvasion:
         """Update images on the screen, and flip to the new screen."""
         self.clock.tick(self.settings.fps)
         self.screen.fill(self.settings.bg_color)
-        for star in self.stars.sprites():
-            star.draw_star()
+        self._draw_stars()
         self.aliens.draw(self.screen)
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
+        self._draw_bullets()
         self.ship.blitme()
         self.sb.show_score()
         if not self.stats.game_active:
-            self.play_button.draw_button()
-            self.easy_button.draw_button()
-            self.normal_button.draw_button()
-            self.hard_button.draw_button()
+            self._draw_buttons()
         pygame.display.flip()
+
+    def _draw_stars(self):
+        """Draw stars."""
+        for star in self.stars.sprites():
+            star.draw_star()
+
+    def _draw_buttons(self):
+        """Draw all the buttons."""
+        self.play_button.draw_button()
+        self.easy_button.draw_button()
+        self.normal_button.draw_button()
+        self.hard_button.draw_button()
+
+    def _draw_bullets(self):
+        """Draw bullets."""
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
 
 
 if __name__ == '__main__':
