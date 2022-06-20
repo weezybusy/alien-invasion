@@ -167,12 +167,18 @@ class AlienInvasion:
             self.sb.prep_score()
             self.sb.check_high_score()
         if not self.aliens:
-            # Remove existing bullets and create new fleet.
-            self.bullets.empty()
-            self._create_fleet()
-            self.settings.increase_speed()
-            self.stats.level += 1
-            self.sb.prep_level()
+            self._start_new_level()
+
+    def _start_new_level(self):
+        """
+        Remove existing bullets, create new fleet, increase speed,
+        increment level, and prepeare a new level text image.
+        """
+        self.bullets.empty()
+        self._create_fleet()
+        self.settings.increase_speed()
+        self.stats.level += 1
+        self.sb.prep_level()
 
     def _update_aliens(self):
         """
