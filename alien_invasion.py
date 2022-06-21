@@ -1,6 +1,7 @@
 import sys
 from time import sleep
 from random import randint
+import json
 
 import pygame
 
@@ -79,8 +80,10 @@ class AlienInvasion:
 
     def _save_high_score(self):
         """Save high score to the file."""
-        with open("high_score.txt", 'w') as f:
-            f.write(str(self.stats.high_score))
+        if self.stats.score > self.stats.high_score:
+            self.stats.high_score = self.stats.score
+            with open("high_score.json", 'w') as f:
+                json.dump(self.stats.high_score, f)
 
     def _check_play_button(self, mouse_pos):
         """Start a new game when the player clicks Play."""
@@ -165,7 +168,7 @@ class AlienInvasion:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
-            self.sb.check_high_score()
+            #self.sb.check_high_score()
         if not self.aliens:
             self._start_new_level()
 

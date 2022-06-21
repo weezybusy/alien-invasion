@@ -1,3 +1,6 @@
+import json
+
+
 class GameStats:
     """Track statistics for Alien Invasion."""
 
@@ -17,10 +20,7 @@ class GameStats:
     def read_hight_score(self):
         """Read high score from the file."""
         try:
-            with open("high_score.txt", 'r') as f:
-                high_score = int(f.read().rstrip())
-                self.high_score = high_score
+            with open("high_score.json", 'r') as f:
+                self.high_score = json.load(f)
         except FileNotFoundError:
-            with open("high_score.txt", 'w') as f:
-                pass
             self.high_score = 0
