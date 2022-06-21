@@ -43,7 +43,6 @@ class AlienInvasion:
         self.easy_button = Button(self, "EASY")
         self.normal_button = Button(self, "NORMAL")
         self.hard_button = Button(self, "HARD")
-
         self.easy_button.rect.top = (
                 self.play_button.rect.top + 1.5 * self.play_button.height)
         self.easy_button._update_msg_position()
@@ -75,8 +74,8 @@ class AlienInvasion:
                 self._check_keyup_events(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
-                self._check_play_button(mouse_pos)
                 self._check_difficulty_buttons(mouse_pos)
+                self._check_play_button(mouse_pos)
 
     def _save_high_score(self):
         """Save high score to the file."""
@@ -87,7 +86,6 @@ class AlienInvasion:
         """Start a new game when the player clicks Play."""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_active:
-            self.settings.initialize_dynamic_settings()
             self._start_game()
 
     def _check_difficulty_buttons(self, mouse_pos):
@@ -104,6 +102,8 @@ class AlienInvasion:
 
     def _start_game(self):
         """Reset stats, fleet, ship, remove cursor, set game to active."""
+        self.settings.initialize_dynamic_settings()
+        self.stats.reset_stats()
         self.stats.game_active = True
         self.sb.prep_images()
         self._reset_game()
@@ -111,7 +111,6 @@ class AlienInvasion:
 
     def _reset_game(self):
         """Reset stats, fleet, bullets, and ship's position."""
-        self.stats.reset_stats()
         self.aliens.empty()
         self.bullets.empty()
         self._create_fleet()
@@ -199,7 +198,7 @@ class AlienInvasion:
         if self.stats.ships_left > 0:
             self.stats.ships_left -= 1
             self.sb.prep_ships()
-            self._reset_ship_fleet_bullets()
+            self._reset_game()
             sleep(0.5)
         else:
             self.stats.game_active = False
@@ -291,12 +290,14 @@ class AlienInvasion:
         self.clock.tick(self.settings.fps)
         self.screen.fill(self.settings.bg_color)
         self._draw_stars()
-        self.aliens.draw(self.screen)
-        self._draw_bullets()
-        self.ship.blitme()
-        self.sb.show_score()
         if not self.stats.game_active:
             self._draw_buttons()
+        else:
+            self.aliens.draw(self.screen)
+            self._draw_bullets()
+            self.ship.blitme()
+            self.sb.show_score()
+
         pygame.display.flip()
 
     def _draw_stars(self):
