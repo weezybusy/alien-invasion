@@ -21,7 +21,6 @@ class AlienInvasion:
     def __init__(self):
         """Initialize the game, and create game resources."""
         pygame.init()
-        pygame.mixer.init(44100, -16, 2, 64)
         self.clock = pygame.time.Clock()
         self.settings = Settings()
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -138,13 +137,16 @@ class AlienInvasion:
             if not self.stats.game_active:
                 self._start_game()
         elif event.key == pygame.K_SPACE:
+            self.bullet_sound.play()
             self._fire_bullet()
 
     def _exit_game(self):
         """Save high score and exit game."""
+        self._save_high_score()
         pygame.mixer.music.stop()
         pygame.mixer.music.unload()
-        self._save_high_score()
+        pygame.mixer.quit()
+        pygame.quit()
         sys.exit()
 
     def _check_keyup_events(self, event):
@@ -159,7 +161,6 @@ class AlienInvasion:
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
-            self.bullet_sound.play()
 
     def _update_bullets(self):
         """Update position of the bullets and get rid of the old ones."""
