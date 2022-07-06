@@ -12,7 +12,7 @@ class Ship(Sprite):
         self.settings = ai_game.settings
 
         # Load the ship image, set its size, and get its rect.
-        self.image = pygame.image.load('images/ship.bmp')
+        self.image = pygame.image.load(self.settings.ship_image)
         self.image = pygame.transform.scale(self.image,
                 (self.settings.ship_width,
                     self.settings.ship_height))

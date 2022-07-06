@@ -1,3 +1,6 @@
+import os
+
+
 class Settings:
     """A class to store all settings for Alien Invasion."""
 
@@ -37,6 +40,15 @@ class Settings:
 
         # How quickly the alien point values increase.
         self.score_scale = 1.5
+
+        # Paths to images.
+        self.alien_image = os.path.join('images', 'alien.bmp')
+        self.ship_image = os.path.join('images', 'ship.bmp')
+
+        # Paths to sound and music files.
+        self.background_music = os.path.join('sounds', 'background_music.mp3')
+        self.bullet_sound = os.path.join('sounds', 'bullet_sound.mp3')
+        self.collision_sound = os.path.join('sounds', 'collision_sound.mp3')
 
         self.difficulty = "normal"
         self.initialize_dynamic_settings()

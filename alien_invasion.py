@@ -40,9 +40,9 @@ class AlienInvasion:
         self._make_difficulty_buttons()
 
         # Load game sounds.
-        pygame.mixer.music.load('sounds/background_music.mp3')
-        self.bullet_sound = pygame.mixer.Sound('sounds/bullet_sound.mp3')
-        self.collision_sound = pygame.mixer.Sound('sounds/collision_sound.mp3')
+        pygame.mixer.music.load(self.settings.background_music)
+        self.bullet_sound = pygame.mixer.Sound(self.settings.bullet_sound)
+        self.collision_sound = pygame.mixer.Sound(self.settings.collision_sound)
 
     def _make_difficulty_buttons(self):
         """Make difficulty buttons."""
